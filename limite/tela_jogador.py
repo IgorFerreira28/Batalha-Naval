@@ -16,15 +16,33 @@ class TelaJogador():
   
   def dados_jogador(self):
     print("-------- DADOS JOGADOR ----------")
-    nome = input("Nome: ")
-    data_nascimento = input("Data de nascimento: ")
-    id = input("ID: ")
+    while True:
+        try:
+            nome = input("Nome: ")
+            if not nome:
+                raise ValueError("O nome não pode ser vazio.")
+            
+            data_nascimento = input("Data de nascimento: ")
+            if not data_nascimento:
+                raise ValueError("A data de nascimento não pode ser vazia.")
+            
+            id = input("ID: ")
+            if not id:
+                raise ValueError("O ID não pode ser vazio.")
+            
+            return {"nome": nome, "data_nascimento": data_nascimento, "id": id}
+        except ValueError as ve:
+            print(f"Erro: {ve}. Por favor, tente novamente.")
 
-    return {"nome": nome, "data_nascimento": data_nascimento, "id": id}
 
   def seleciona_jogador(self):
-    id = input('Digite o ID do jogador que deseja selecionar: ')
-    return id
+    try:
+      id = input('Digite o ID do jogador que deseja selecionar: ')
+      if not id:
+         raise ValueError("O ID não pode ser vazio.")
+      return id
+    except ValueError as ve:
+       print(f"Erro: {ve}. Por favor, tente novamente.")
   
   def mostra_jogador(self, dados_jogador):
     print("NOME DO JOGADOR: ", dados_jogador["nome"])
@@ -33,6 +51,15 @@ class TelaJogador():
     print("\n")
 
   def seleciona_partida(self):
+    try:
+      num = int(input("Selecione um número entre as opções: "))
+      if not num:
+         raise ValueError("O Número não pode ser vazio.")
+      if isinstance(num, str):
+         raise ValueError("O Número deve ser um número.")
+      return id
+    except ValueError as ve:
+       print(f"Erro: {ve}. Por favor, tente novamente.")
     num = int(input("Selecione um número entre as opções: "))
     return num - 1 
 

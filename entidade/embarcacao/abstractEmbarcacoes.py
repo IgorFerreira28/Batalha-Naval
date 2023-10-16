@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
-class Navio(ABC):
+class Embarcacoes(ABC):
     def __init__(self, tamanho):
         self.__tamanho = tamanho
 
     @property
     @abstractmethod
     def tamanho(self):
-        pass
+        return self.__tamanho
