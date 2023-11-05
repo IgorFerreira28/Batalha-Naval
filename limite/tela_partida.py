@@ -3,7 +3,7 @@ class TelaPartida:
         print("-------- Tela Partida --------")
         print("Escolha uma opção")
         print("1 - Começar Partida")
-        print("2 - Retornar")
+        print("0 - Retornar")
 
         opcao = int(input("Selecione uma opção "))
         return opcao

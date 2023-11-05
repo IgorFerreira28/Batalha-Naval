@@ -37,19 +37,30 @@ class ControladorJogador:
 
     def inserir_jogador(self):
         dados_jogador = self.tela_jogador.dados_jogador()
-        player = Jogador(dados_jogador["nome"], dados_jogador["data_nascimento"], dados_jogador["id"])
-        self.lista_jogadores.append(player)
+        livre = True
+        for i in self.lista_jogadores:
+            if i.id == dados_jogador["id"]:
+                livre = False
+                self.tela_jogador.mostra_mensagem("Esse ID ja esta em uso!")
+        if livre:
+            player = Jogador(dados_jogador["nome"], dados_jogador["data_nascimento"], dados_jogador["id"])
+            self.lista_jogadores.append(player)
 
     def alterar_jogador(self):
         self.listar_jogadores()
         id_jogador = self.tela_jogador.seleciona_jogador()
         player = self.pega_jogador_por_id(id_jogador)
-
+        livre = True
         if (player is not None):
             novo_player = self.tela_jogador.dados_jogador()
-            player.nome = novo_player["nome"]
-            player.data_nascimento = novo_player["data_nascimento"]
-            player.id = novo_player["id"]
+            for i in self.lista_jogadores:
+                if i.id == novo_player["id"]:
+                    self.tela_jogador.mostra_mensagem("ID ja em uso!")
+                    livre = False
+            if livre:
+                player.nome = novo_player["nome"]
+                player.data_nascimento = novo_player["data_nascimento"]
+                player.id = novo_player["id"]
         else:
             self.tela_jogador.mostra_mensagem("ATENÇÃO: Esse Jogador Não Existe")
 

@@ -7,10 +7,9 @@ from limite.tela_jogador import TelaJogador
 from random import randrange
 
 class ControladorPartida:
-    def __init__(self, controlador_geral):
-        self.__jogador = Jogador
-        self.__partida = Partida(self.__jogador)
-        self.__monta_oceano = Oceano(10)
+    def __init__(self, controlador_geral, jogador, partida, oceano):
+        self.__jogador = jogador
+        self.__partida = partida
         self.__tela_partida = TelaPartida()
         self.__controlador_geral = controlador_geral
         self.__tela_oceano = TelaOceano()
@@ -18,12 +17,11 @@ class ControladorPartida:
         self.__jogadas_computador = []
         self.__score_player = 0
         self.__score_computador = 0
-        self.__oceano_player = self.__monta_oceano.oceano_player
-        self.__oceano_computador = self.__monta_oceano.oceano_computador
-        self.__posicoes_navios_player = self.__monta_oceano.posicoes_navios_player
-        self.__posicoes_navios_computador  = self.__monta_oceano.posicoes_navios_computador
-        self.__tamanho = self.__monta_oceano.tamanho_oceano
-        self.__oceano_modelo = [[0] * self.__tamanho for j in range(self.__tamanho)]
+        self.__oceano_player = oceano
+        self.__oceano_computador = oceano
+        self.__posicoes_navios_player = self.__oceano_player.posicoes_navios
+        self.__posicoes_navios_computador  = self.__oceano_computador.posicoes_navios
+        self.__oceano_modelo = []
 
     @property
     def jogador(self):
@@ -42,14 +40,6 @@ class ControladorPartida:
         self.__partida = partida
 
     @property
-    def monta_oceano(self):
-        return self.__monta_oceano
-    
-    @monta_oceano.setter
-    def monta_oceano(self, oceano):
-        self.__monta_oceano = oceano
-
-    @property
     def tela_partida(self):
         return self.__tela_partida
 
@@ -60,7 +50,7 @@ class ControladorPartida:
     @property
     def score_player(self):
         return self.__score_player
-    
+
     @score_player.setter
     def score_player(self, score):
         self.__score_player = score
@@ -76,7 +66,7 @@ class ControladorPartida:
     @property
     def oceano_player(self):
         return self.__oceano_player
-    
+
     @oceano_player.setter
     def oceano_player(self, oceano):
         self.__oceano_player = oceano
@@ -84,7 +74,7 @@ class ControladorPartida:
     @property
     def oceano_computador(self):
         return self.__oceano_computador
-    
+
     @oceano_computador.setter
     def oceano_computador(self, oceano):
         self.__oceano_computador = oceano
@@ -92,7 +82,7 @@ class ControladorPartida:
     @property
     def posicoes_navios_player(self):
         return self.__posicoes_navios_player
-    
+
     @posicoes_navios_player.setter
     def posicoes_navios_player(self, posicoes):
         self.__posicoes_navios_player = posicoes
@@ -100,7 +90,7 @@ class ControladorPartida:
     @property
     def jogadas_player(self):
         return self.__jogadas_player
-    
+
     @jogadas_player.setter
     def jogadas_player(self, jogadas):
         self.__jogadas_player = jogadas
@@ -108,7 +98,7 @@ class ControladorPartida:
     @property
     def jogadas_computador(self):
         return self.__jogadas_computador
-    
+
     @jogadas_computador.setter
     def jogadas_computador(self, jogadas):
         self.__jogadas_computador = jogadas
@@ -116,7 +106,7 @@ class ControladorPartida:
     @property
     def posicoes_navios_computador(self):
         return self.__posicoes_navios_computador
-    
+
     @posicoes_navios_computador.setter
     def posicoes_navios_computador(self, posicoes):
         self.__posicoes_navios_computador = posicoes
@@ -124,7 +114,7 @@ class ControladorPartida:
     @property
     def tamanho(self):
         return self.__tamanho
-    
+
     @tamanho.setter
     def tamanho(self, tamanho):
         self.__tamanho = tamanho
@@ -132,20 +122,20 @@ class ControladorPartida:
     @property
     def oceano_modelo(self):
         return self.__oceano_modelo
-    
+
     @oceano_modelo.setter
     def oceano_modelo(self, oceano):
         self.__oceano_modelo = oceano
 
-
     def comecar_partida(self):
         info = self.__tela_partida.comecar_partida()
-        jogador = self.__controlador_geral.controlador_jogador.pega_jogador_por_id(str(info["id"]))
+        self.__jogador = self.__controlador_geral.controlador_jogador.pega_jogador_por_id(str(info["id"]))
         tamanho_oceano = int(info["tamanho_oceano"])
-        print(self.__jogador)
-        if isinstance(jogador, Jogador) and isinstance(tamanho_oceano, int):
+        if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
             self.__partida = Partida(self.__jogador)
-            self.__monta_oceano = Oceano(tamanho_oceano)
+            self.__oceano_player = Oceano(tamanho_oceano)
+            self.__oceano_computador = Oceano(tamanho_oceano)
+            self.__oceano_modelo = [[0] * tamanho_oceano for j in range(tamanho_oceano)]
             self.posiciona_navios(self.__partida.navios_player, self.__partida.navios_computador)
             self.__controlador_geral.cadastra_oceano()
 
@@ -187,7 +177,6 @@ class ControladorPartida:
                 raise ValueError
             except ValueError:
                 self.__tela_partida.mostra_mensagem("Valor inválido, digite um número Válido")
-
 
     def jogada(self):
         tiro_player = True
