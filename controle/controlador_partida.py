@@ -7,9 +7,9 @@ from limite.tela_jogador import TelaJogador
 from random import randrange
 
 class ControladorPartida:
-    def __init__(self, controlador_geral, jogador, partida, oceano):
-        self.__jogador = jogador
-        self.__partida = partida
+    def __init__(self, controlador_geral):
+        self.__jogador = Jogador("a", "1", "1000")
+        self.__partida = Partida(self.__jogador)
         self.__tela_partida = TelaPartida()
         self.__controlador_geral = controlador_geral
         self.__tela_oceano = TelaOceano()
@@ -17,8 +17,8 @@ class ControladorPartida:
         self.__jogadas_computador = []
         self.__score_player = 0
         self.__score_computador = 0
-        self.__oceano_player = oceano
-        self.__oceano_computador = oceano
+        self.__oceano_player = Oceano(10)
+        self.__oceano_computador = Oceano(10)
         self.__posicoes_navios_player = self.__oceano_player.posicoes_navios
         self.__posicoes_navios_computador  = self.__oceano_computador.posicoes_navios
         self.__oceano_modelo = []
@@ -291,7 +291,7 @@ class ControladorPartida:
                 if not posicao_em_uso:
                     lista_temporaria.append(posicao)
                     self.__posicoes_navios_player.append(lista_temporaria)
-                    self.__oceano_player[posicao[0]][posicao[1]] = 'B'
+                    self.__oceano_player.__mapa[posicao[0]][posicao[1]] = 'B'
                     self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
                     break
 
@@ -299,9 +299,9 @@ class ControladorPartida:
             lista_temporaria1 = [1, [2,3]]
             lista_temporaria2 = [1, [8,0]]
             lista_temporaria3 = [1, [5,3]]
-            self.__oceano_computador[2][3] = 'B'
-            self.__oceano_computador[8][0] = 'B'
-            self.__oceano_computador[5][3] = 'B'
+            self.__oceano_computador.__mapa[2][3] = 'B'
+            self.__oceano_computador.__mapa[8][0] = 'B'
+            self.__oceano_computador.__mapa[5][3] = 'B'
             self.__posicoes_navios_computador.append(lista_temporaria1)
             self.__posicoes_navios_computador.append(lista_temporaria2)
             self.__posicoes_navios_computador.append(lista_temporaria3)

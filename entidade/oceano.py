@@ -7,7 +7,7 @@ class Oceano:
     @property
     def tamanho_oceano(self):
         return self.__tamanho_oceano
-    
+
     @tamanho_oceano.setter
     def tamanho_oceano(self, tamanho):
         if isinstance(tamanho, int):
@@ -16,7 +16,7 @@ class Oceano:
     @property
     def mapa(self):
         return self.__mapa
-    
+
     @mapa.setter
     def mapa(self, oceano):
         if isinstance(oceano, list):
@@ -25,7 +25,7 @@ class Oceano:
     @property
     def posicoes_navios(self):
         return self.__posicoes_navios
-    
+
     @posicoes_navios.setter
     def posicoes_navios(self, posicoes):
         if isinstance(posicoes, list):
