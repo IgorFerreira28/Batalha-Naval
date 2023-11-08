@@ -13,6 +13,7 @@ class ControladorPartida:
         self.__tela_partida = TelaPartida()
         self.__controlador_geral = controlador_geral
         self.__tela_oceano = TelaOceano()
+        self.__tamanho = 10
         self.__jogadas_player = []
         self.__jogadas_computador = []
         self.__score_player = 0
@@ -131,6 +132,7 @@ class ControladorPartida:
         info = self.__tela_partida.comecar_partida()
         self.__jogador = self.__controlador_geral.controlador_jogador.pega_jogador_por_id(str(info["id"]))
         tamanho_oceano = int(info["tamanho_oceano"])
+        self.__tamanho = tamanho_oceano
         if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
             self.__partida = Partida(self.__jogador)
             self.__oceano_player = Oceano(tamanho_oceano)
@@ -194,7 +196,7 @@ class ControladorPartida:
                 for j in self.posicoes_navios_computador:
                     if tiro in j:
                         self.score_player += 1
-                        self.oceano_modelo[tiro[0]][tiro[1]] = self.oceano_computador[tiro[0]][tiro[1]]
+                        self.oceano_modelo[tiro[0]][tiro[1]] = self.oceano_computador.mapa[tiro[0]][tiro[1]]
                         self.jogadas_player.append(tiro)
                         acertou = True
                         if j[0] == 0 or (j[0] - 1 == 0):
@@ -226,7 +228,7 @@ class ControladorPartida:
                         self.score_computador += 1
                         self.jogadas_computador.append(tiro_npc)
                         acertou = True
-                        self.oceano_player[tiro_npc[0]][tiro_npc[1]] = 'X'
+                        self.oceano_player.mapa[tiro_npc[0]][tiro_npc[1]] = 'X'
                         if j[0] == 0 or (j[0] - 1 == 0):
                             self.score_computador += 3
                             self.tela_oceano.mostra_mensagem("O Computador destruiu uma embarcação sua")
@@ -235,6 +237,7 @@ class ControladorPartida:
                     self.tela_oceano.mostra_mensagem("O Computador acertou sua embarcação")
                 else:
                     tiro_bot = False
+                    self.oceano_player.mapa[tiro_npc[0]][tiro_npc[1]] = 1
                     self.jogadas_computador.append(tiro_npc)
                     self.tela_oceano.mostra_mensagem("O Computador errou, agora é sua vez")
 
@@ -243,7 +246,7 @@ class ControladorPartida:
         self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_modelo)
 
     def mostrar_oceano(self):
-        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
+        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player.mapa)
 
     def posiciona_navios(self, barco_player, barco_bot):
         barcos_player = barco_player
@@ -291,17 +294,17 @@ class ControladorPartida:
                 if not posicao_em_uso:
                     lista_temporaria.append(posicao)
                     self.__posicoes_navios_player.append(lista_temporaria)
-                    self.__oceano_player.__mapa[posicao[0]][posicao[1]] = 'B'
-                    self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
+                    self.__oceano_player.mapa[posicao[0]][posicao[1]] = 'B'
+                    self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player.mapa)
                     break
 
         elif who == "computador":
             lista_temporaria1 = [1, [2,3]]
             lista_temporaria2 = [1, [8,0]]
             lista_temporaria3 = [1, [5,3]]
-            self.__oceano_computador.__mapa[2][3] = 'B'
-            self.__oceano_computador.__mapa[8][0] = 'B'
-            self.__oceano_computador.__mapa[5][3] = 'B'
+            self.__oceano_computador.mapa[2][3] = 'B'
+            self.__oceano_computador.mapa[8][0] = 'B'
+            self.__oceano_computador.mapa[5][3] = 'B'
             self.__posicoes_navios_computador.append(lista_temporaria1)
             self.__posicoes_navios_computador.append(lista_temporaria2)
             self.__posicoes_navios_computador.append(lista_temporaria3)
@@ -353,15 +356,15 @@ class ControladorPartida:
                         for x in posicoes_x:
                             lista_temporaria.append([posicoes_y[0], x]) 
                             self.__posicoes_navios_player.append(lista_temporaria)
-                            self.__oceano_player[posicoes_y[0]][x] = 'P'
-                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
+                            self.__oceano_player.mapa[posicoes_y[0]][x] = 'P'
+                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player.mapa)
                         porta_avioes_restantes -= 1
                     elif condicaoy:
                         for y in posicoes_y:
                             lista_temporaria.append([posicoes_x[0], y])
                             self.__posicoes_navios_player.append(lista_temporaria)
-                            self.__oceano_player[y][posicoes_x[0]] = 'P'
-                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
+                            self.__oceano_player.mapa[y][posicoes_x[0]] = 'P'
+                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player.mapa)
                         porta_avioes_restantes -= 1
 
                 except ValueError:
@@ -369,10 +372,10 @@ class ControladorPartida:
         
         elif who == "computador":
             lista_temporaria = [4,[0,0],[0,1],[0,2],[0,3]]
-            self.__oceano_computador[0][0] = 'P'
-            self.__oceano_computador[0][1] = 'P'
-            self.__oceano_computador[0][2] = 'P'
-            self.__oceano_computador[0][3] = 'P'
+            self.__oceano_computador.mapa[0][0] = 'P'
+            self.__oceano_computador.mapa[0][1] = 'P'
+            self.__oceano_computador.mapa[0][2] = 'P'
+            self.__oceano_computador.mapa[0][3] = 'P'
             self.__posicoes_navios_computador.append(lista_temporaria)
             
     def posiciona_fragata(self, tamanho, who):
@@ -422,15 +425,15 @@ class ControladorPartida:
                         for x in posicoes_x:
                             lista_temporaria.append([posicoes_y[0], x]) 
                             self.__posicoes_navios_player.append(lista_temporaria)
-                            self.__oceano_player[posicoes_y[0]][x] = 'F'
-                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
+                            self.__oceano_player.mapa[posicoes_y[0]][x] = 'F'
+                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player.mapa)
                         fragatas_restantes -= 1
                     elif condicaoy:
                         for y in posicoes_y:
                             lista_temporaria.append([posicoes_x[0], y])
                             self.__posicoes_navios_player.append(lista_temporaria)
-                            self.__oceano_player[y][posicoes_x[0]] = 'F'
-                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
+                            self.__oceano_player.mapa[y][posicoes_x[0]] = 'F'
+                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player.mapa)
                         fragatas_restantes -= 1
 
                 except ValueError:
@@ -439,12 +442,12 @@ class ControladorPartida:
         elif who == "computador":
             lista_temporaria1 = [3, [3,5],[3,6],[3,7]]
             lista_temporaria2 =[3, [4,0],[5,0],[6,0]]
-            self.__oceano_computador[3][5]= 'F'
-            self.__oceano_computador[3][6] = 'F'
-            self.__oceano_computador[3][7] = 'F'
-            self.__oceano_computador[4][0] = 'F'
-            self.__oceano_computador[5][0] = 'F'
-            self.__oceano_computador[6][0] = 'F'
+            self.__oceano_computador.mapa[3][5]= 'F'
+            self.__oceano_computador.mapa[3][6] = 'F'
+            self.__oceano_computador.mapa[3][7] = 'F'
+            self.__oceano_computador.mapa[4][0] = 'F'
+            self.__oceano_computador.mapa[5][0] = 'F'
+            self.__oceano_computador.mapa[6][0] = 'F'
             self.__posicoes_navios_computador.append(lista_temporaria1)
             self.__posicoes_navios_computador.append(lista_temporaria2)
 
@@ -495,15 +498,15 @@ class ControladorPartida:
                         for x in posicoes_x:
                             lista_temporaria.append([posicoes_y[0], x]) 
                             self.__posicoes_navios_player.append(lista_temporaria)
-                            self.__oceano_player[posicoes_y[0]][x] = 'S'
-                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
+                            self.__oceano_player.mapa[posicoes_y[0]][x] = 'S'
+                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player.mapa)
                         submarinos_restantes -= 1
                     elif condicaoy:
                         for y in posicoes_y:
                             lista_temporaria.append([posicoes_x[0], y])
                             self.__posicoes_navios_player.append(lista_temporaria)
-                            self.__oceano_player[y][posicoes_x[0]] = 'S'
-                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player)
+                            self.__oceano_player.mapa[y][posicoes_x[0]] = 'S'
+                        self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_player.mapa)
                         submarinos_restantes -= 1
 
                 except ValueError:
@@ -512,10 +515,10 @@ class ControladorPartida:
         elif who == "computador":
             lista_temporaria1 = [2, [6,5],[6,6]]
             lista_temporaria2 = [2, [4,4], [4,5]]
-            self.__oceano_computador[6][5] = 'S'
-            self.__oceano_computador[6][6] = 'S'
-            self.__oceano_computador[4][4] = 'S'
-            self.__oceano_computador[4][5] = 'S'
+            self.__oceano_computador.mapa[6][5] = 'S'
+            self.__oceano_computador.mapa[6][6] = 'S'
+            self.__oceano_computador.mapa[4][4] = 'S'
+            self.__oceano_computador.mapa[4][5] = 'S'
             self.__posicoes_navios_computador.append(lista_temporaria1)
             self.__posicoes_navios_computador.append(lista_temporaria2)
-            self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_computador)
+            self.tela_oceano.mostrar_oceano(self.__tamanho, self.__oceano_computador.mapa)
