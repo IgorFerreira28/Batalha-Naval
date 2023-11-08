@@ -62,7 +62,7 @@ class TelaOceano:
             print(f"Erro: {ve}.")
 
     def mostra_mensagem(self, msg):
-        return msg
+        print(msg)
     
     def mostrar_oceano(self, tamanho, oceano):
         for linha in range(tamanho):

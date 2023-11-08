@@ -150,8 +150,8 @@ class ControladorPartida:
     def navio_computador(self):
         return self.__partida.navios_computador()
 
-    def pontuacao(self):
-        pass
+    def pontuacao(self, score):
+        self.__jogador.pontuacao += score
 
     def retornar(self):
         self.__controlador_geral.controlador_jogador.abre_tela()
@@ -186,6 +186,7 @@ class ControladorPartida:
         while tiro_player:
             if self.score_player == 41:
                 self.tela_oceano.mostra_mensagem("Você Venceu a batalha, Parabéns")
+                self.pontuacao(self.score_player)
                 break
             jogada = self.tela_oceano.jogada()
             tiro = list(jogada)
@@ -195,12 +196,13 @@ class ControladorPartida:
                 acertou = False
                 for j in self.posicoes_navios_computador:
                     if tiro in j:
-                        self.score_player += 1
+                        self.__score_player += 1
                         self.oceano_modelo[tiro[0]][tiro[1]] = self.oceano_computador.mapa[tiro[0]][tiro[1]]
                         self.jogadas_player.append(tiro)
                         acertou = True
-                        if j[0] == 0 or (j[0] - 1 == 0):
-                            self.score_player += 3
+                        j[0] = j[0] - 1
+                        if j[0] == 0:
+                            self.__score_player += 3
                             self.tela_oceano.mostra_mensagem("Você destruiu uma embarcação adversária!! +3pts")
                         break
                 if acertou:
@@ -225,12 +227,13 @@ class ControladorPartida:
                 acertou = False
                 for j in self.posicoes_navios_player:
                     if tiro_npc in j:
-                        self.score_computador += 1
+                        self.__score_computador += 1
                         self.jogadas_computador.append(tiro_npc)
                         acertou = True
                         self.oceano_player.mapa[tiro_npc[0]][tiro_npc[1]] = 'X'
-                        if j[0] == 0 or (j[0] - 1 == 0):
-                            self.score_computador += 3
+                        j[0] = j[0] - 1
+                        if j[0] == 0:
+                            self.__score_computador += 3
                             self.tela_oceano.mostra_mensagem("O Computador destruiu uma embarcação sua")
                         break
                 if acertou:
@@ -286,7 +289,7 @@ class ControladorPartida:
                 coordenada = self.tela_oceano.posiciona_navios()
                 posicao = list(coordenada)
                 posicao_em_uso = False
-                for i in self.__posicoes_navios_player:
+                for i in self.posicoes_navios_player:
                     if posicao in i:
                         posicao_em_uso = True
                     if posicao_em_uso:
@@ -329,7 +332,7 @@ class ControladorPartida:
                         else:
                             for x in posicoes_x:
                                 position = [posicoes_y[0], x]
-                                for i in self.__posicoes_navios_player:
+                                for i in self.posicoes_navios_player:
                                     if position in i:
                                         self.tela_oceano.mostra_mensagem("Você colocou uma posição já em uso, posicione novamente")
                                         condicaox = False
@@ -343,7 +346,7 @@ class ControladorPartida:
                         else:
                             for y in posicoes_y:
                                 position = [y, posicoes_x[0]]
-                                for i in self.__posicoes_navios_player:
+                                for i in self.posicoes_navios_player:
                                     if position in i:
                                         self.tela_oceano.mostra_mensagem("Você colocou uma posição já em uso, posicione novamente")
                                         condicaoy = False
@@ -398,7 +401,7 @@ class ControladorPartida:
                         else:
                             for x in posicoes_x:
                                 position = [posicoes_y[0], x]
-                                for i in self.__posicoes_navios_player:
+                                for i in self.posicoes_navios_player:
                                     if position in i:
                                         self.tela_oceano.mostra_mensagem("Você colocou uma posição já em uso, posicione novamente")
                                         condicaox = False
@@ -412,7 +415,7 @@ class ControladorPartida:
                         else:
                             for y in posicoes_y:
                                 position = [y, posicoes_x[0]]
-                                for i in self.__posicoes_navios_player:
+                                for i in self.posicoes_navios_player:
                                     if position in i:
                                         self.tela_oceano.mostra_mensagem("Você colocou uma posição já em uso, posicione novamente")
                                         condicaoy = False
@@ -471,7 +474,7 @@ class ControladorPartida:
                         else:
                             for x in posicoes_x:
                                 position = [posicoes_y[0], x]
-                                for i in self.__posicoes_navios_player:
+                                for i in self.posicoes_navios_player:
                                     if position in i:
                                         self.tela_oceano.mostra_mensagem("Você colocou uma posição já em uso, posicione novamente")
                                         condicaox = False
@@ -485,7 +488,7 @@ class ControladorPartida:
                         else:
                             for y in posicoes_y:
                                 position = [y, posicoes_x[0]]
-                                for i in self.__posicoes_navios_player:
+                                for i in self.posicoes_navios_player:
                                     if position in i:
                                         self.tela_oceano.mostra_mensagem("Você colocou uma posição já em uso, posicione novamente")
                                         condicaoy = False
