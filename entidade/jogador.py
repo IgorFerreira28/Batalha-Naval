@@ -34,6 +34,10 @@ class Jogador:
     def pontuacao(self):
         return self.__pontuacao
     
+    @pontuacao.setter
+    def pontuacao(self, pontuacao):
+        self.__pontuacao = pontuacao
+    
     @property
     def partidas(self):
         return self.__partidas

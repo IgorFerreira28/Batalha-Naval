@@ -187,7 +187,7 @@ class ControladorPartida:
             if self.score_player == 41:
                 self.tela_oceano.mostra_mensagem("Você Venceu a batalha, Parabéns")
                 self.pontuacao(self.score_player)
-                break
+                self.__controlador_geral.controlador_jogador.abre_tela()
             jogada = self.tela_oceano.jogada()
             tiro = list(jogada)
             if tiro in self.jogadas_player:
@@ -216,8 +216,9 @@ class ControladorPartida:
 
         while tiro_bot:
             if self.score_computador == 41:
+                self.pontuacao(self.score_player)
                 self.tela_oceano.mostra_mensagem("Você Perdeu a Batalha!")
-                break
+                self.__controlador_geral.controlador_jogador.abre_tela()
             shot_y = randrange(self.__tamanho)
             shot_x = randrange(self.__tamanho)
             tiro_npc = [shot_y, shot_x]
