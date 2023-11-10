@@ -64,7 +64,6 @@ class Partida:
         if isinstance(navios, list):
             self.__navios_computador = navios
     
-    
     @property
     def oceano_computador(self):
         return self.__monta_oceano.oceano_computador()

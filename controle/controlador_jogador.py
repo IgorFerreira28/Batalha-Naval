@@ -70,14 +70,23 @@ class ControladorJogador:
 
     def historico_partidas(self):
         self.listar_jogadores()
-        id_jogador = self.tela_jogador.seleciona_jogador() 
+        id_jogador = self.tela_jogador.seleciona_jogador()
         jogador = self.pega_jogador_por_id(id_jogador)
         if jogador is not None:
-            self.tela_jogador.mostra_mensagem(f"O {jogador.nome()}, tem {len(jogador.partidas())} partidas em seu histórico")
+            self.tela_jogador.mostra_mensagem(f"O {jogador.nome}, tem {len(jogador.partidas)} partidas em seu histórico")
+            if len(jogador.partidas) == 0:
+                self.abre_tela()
             for i in range(len(jogador.partidas)):
-                self.tela_jogador.mostra_mensagem(f"Partida Número {i+1}")
+                self.tela_jogador.mostra_mensagem(f"--> Partida Número {i+1}")
             num = self.tela_jogador.seleciona_partida()
-            self.tela_jogador.mostra_mensagem(f"{jogador.partidas()[num-1]}")
+            for j in range(3):
+                if j == 2:
+                    if jogador.partidas[num-1][2]:
+                        self.tela_jogador.mostra_mensagem(f"O {jogador.nome} venceu a partida")
+                    else:
+                        self.tela_jogador.mostra_mensagem(f"O {jogador.nome} perdeu a partida")
+                else:
+                    self.tela_jogador.mostra_mensagem(f"{jogador.partidas[num-1][j]}")
 
     def secao_partida(self):
         self.__controlador_geral.cadastra_partida()

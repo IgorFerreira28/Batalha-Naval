@@ -130,7 +130,7 @@ class ControladorPartida:
 
     def comecar_partida(self):
         info = self.__tela_partida.comecar_partida()
-        self.__jogador = self.__controlador_geral.controlador_jogador.pega_jogador_por_id(str(info["id"]))
+        self.__jogador = self.__controlador_geral.controlador_jogador.pega_jogador_por_id(info["id"])
         tamanho_oceano = int(info["tamanho_oceano"])
         self.__tamanho = tamanho_oceano
         if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
@@ -187,6 +187,8 @@ class ControladorPartida:
             if self.score_player == 41:
                 self.tela_oceano.mostra_mensagem("Você Venceu a batalha, Parabéns")
                 self.pontuacao(self.score_player)
+                dados = [self.oceano_player, self.oceano_modelo, True]
+                self.__jogador.partidas.append(dados)
                 self.__controlador_geral.controlador_jogador.abre_tela()
             jogada = self.tela_oceano.jogada()
             tiro = list(jogada)
@@ -218,6 +220,8 @@ class ControladorPartida:
             if self.score_computador == 41:
                 self.pontuacao(self.score_player)
                 self.tela_oceano.mostra_mensagem("Você Perdeu a Batalha!")
+                dados = list(self.oceano_player, self.oceano_modelo, False)
+                self.__jogador.partidas.append(dados)
                 self.__controlador_geral.controlador_jogador.abre_tela()
             shot_y = randrange(self.__tamanho)
             shot_x = randrange(self.__tamanho)
@@ -284,6 +288,7 @@ class ControladorPartida:
                 submarino += 1
 
     def posiciona_bote(self, who):
+        self.tela_oceano.mostra_mensagem("Posicinando um Bote: 1 Posicao")
         lista_temporaria = [1]
         if who == "player":
             while True:
@@ -314,6 +319,7 @@ class ControladorPartida:
             self.__posicoes_navios_computador.append(lista_temporaria3)
 
     def posiciona_porta_avioes(self, tamanho, who):
+        self.tela_oceano.mostra_mensagem("Posicinando um Porta Aviões: 4 Posicões")
         lista_temporaria = [4] 
         if who == "player":
             porta_avioes_restantes = 1
@@ -383,6 +389,7 @@ class ControladorPartida:
             self.__posicoes_navios_computador.append(lista_temporaria)
             
     def posiciona_fragata(self, tamanho, who):
+        self.tela_oceano.mostra_mensagem("Posicinando uma Fragata: 3 Posicões")
         lista_temporaria = [3] 
         if who == "player":
             fragatas_restantes = 1
@@ -456,6 +463,7 @@ class ControladorPartida:
             self.__posicoes_navios_computador.append(lista_temporaria2)
 
     def posiciona_submarino(self, tamanho, who):
+        self.tela_oceano.mostra_mensagem("Posicinando um Submarino: 2 Posicões")
         lista_temporaria = [2]
         if who == "player":
             submarinos_restantes = 1

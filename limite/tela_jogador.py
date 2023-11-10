@@ -26,9 +26,12 @@ class TelaJogador():
             if not data_nascimento:
                 raise ValueError("A data de nascimento não pode ser vazia.")
             
-            id = input("ID: ")
+            id = int(input("ID: "))
             if not id:
                 raise ValueError("O ID não pode ser vazio.")
+            
+            if isinstance(id, str):
+               raise ValueError("O ID deve ser um numero inteiro")
             
             return {"nome": nome, "data_nascimento": data_nascimento, "id": id}
         except ValueError as ve:
@@ -37,9 +40,12 @@ class TelaJogador():
 
   def seleciona_jogador(self):
     try:
-      id = input('Digite o ID do jogador que deseja selecionar: ')
+      id = int(input('Digite o ID do jogador que deseja selecionar: '))
       if not id:
          raise ValueError("O ID não pode ser vazio.")
+      
+      if isinstance(id, str):
+         raise ValueError("O ID deve ser um numero inteiro")
       return id
     except ValueError as ve:
        print(f"Erro: {ve}. Por favor, tente novamente.")
@@ -61,7 +67,7 @@ class TelaJogador():
     except ValueError as ve:
        print(f"Erro: {ve}. Por favor, tente novamente.")
     num = int(input("Selecione um número entre as opções: "))
-    return num - 1 
+    return num 
 
   def mostra_rank(self, rank):
     print(rank)
