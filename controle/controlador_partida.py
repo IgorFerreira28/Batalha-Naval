@@ -187,8 +187,14 @@ class ControladorPartida:
             if self.score_player == 41:
                 self.tela_oceano.mostra_mensagem("Você Venceu a batalha, Parabéns")
                 self.pontuacao(self.score_player)
-                dados = [self.oceano_player, self.oceano_modelo, True]
+                dados = [self.oceano_player, self.oceano_modelo, True, self.tamanho]
                 self.__jogador.partidas.append(dados)
+                self.__jogadas_computador = []
+                self.__jogadas_player = []
+                self.__posicoes_navios_computador = []
+                self.__posicoes_navios_player = []
+                self.__score_computador = 0
+                self.__score_player = 0
                 self.__controlador_geral.controlador_jogador.abre_tela()
             jogada = self.tela_oceano.jogada()
             tiro = list(jogada)
@@ -222,6 +228,12 @@ class ControladorPartida:
                 self.tela_oceano.mostra_mensagem("Você Perdeu a Batalha!")
                 dados = list(self.oceano_player, self.oceano_modelo, False)
                 self.__jogador.partidas.append(dados)
+                self.__jogadas_computador = []
+                self.__jogadas_player = []
+                self.__posicoes_navios_computador = []
+                self.__posicoes_navios_player = []
+                self.__score_computador = 0
+                self.__score_player = 0
                 self.__controlador_geral.controlador_jogador.abre_tela()
             shot_y = randrange(self.__tamanho)
             shot_x = randrange(self.__tamanho)

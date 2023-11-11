@@ -60,14 +60,27 @@ class TelaJogador():
     try:
       num = int(input("Selecione um número entre as opções: "))
       if not num:
-         raise ValueError("O Número não pode ser vazio.")
+        raise ValueError("O Número não pode ser vazio.")
       if isinstance(num, str):
-         raise ValueError("O Número deve ser um número.")
-      return id
+        raise ValueError("O Número deve ser um número.")
+      return num
     except ValueError as ve:
-       print(f"Erro: {ve}. Por favor, tente novamente.")
-    num = int(input("Selecione um número entre as opções: "))
-    return num 
+      print(f"Erro: {ve}. Por favor, tente novamente.") 
+
+  def mostra_historico(tamanho, oceano):
+    for linha in range(tamanho):
+          if linha == 0:
+              print(f'Y/X   {linha}', end='   ')
+          else:
+            print(f'{linha}', end='   ')
+    print()
+    for linha in range(tamanho):
+          for coluna in range(tamanho):
+              if coluna == 0:
+                  print(f' {linha}   [{oceano[linha][coluna]}]', end=' ')
+              else:
+                  print(f'[{oceano[linha][coluna]}]', end=' ')
+          print()
 
   def mostra_rank(self, rank):
     print(rank)

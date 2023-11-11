@@ -79,14 +79,12 @@ class ControladorJogador:
             for i in range(len(jogador.partidas)):
                 self.tela_jogador.mostra_mensagem(f"--> Partida Número {i+1}")
             num = self.tela_jogador.seleciona_partida()
-            for j in range(3):
-                if j == 2:
-                    if jogador.partidas[num-1][2]:
-                        self.tela_jogador.mostra_mensagem(f"O {jogador.nome} venceu a partida")
-                    else:
-                        self.tela_jogador.mostra_mensagem(f"O {jogador.nome} perdeu a partida")
-                else:
-                    self.tela_jogador.mostra_mensagem(f"{jogador.partidas[num-1][j]}")
+            self.tela_jogador.mostra_historico(jogador.partidas[num-1][3], jogador.partidas[num-1][0])
+            self.tela_jogador.mostra_historico(jogador.partidas[num-1][3], jogador.partidas[num-1][1])
+            if jogador.partidas[num-1][2]:
+                self.tela_jogador.mostra_mensagem(f"O {jogador.nome} venceu a partida")
+            else:
+                self.tela_jogador.mostra_mensagem(f"O {jogador.nome} perdeu a partida")
 
     def secao_partida(self):
         self.__controlador_geral.cadastra_partida()
