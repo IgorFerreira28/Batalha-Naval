@@ -187,7 +187,7 @@ class ControladorPartida:
             if self.score_player == 41:
                 self.tela_oceano.mostra_mensagem("Você Venceu a batalha, Parabéns")
                 self.pontuacao(self.score_player)
-                dados = [self.oceano_player, self.oceano_modelo, True, self.tamanho]
+                dados = [self.oceano_player.mapa, self.oceano_modelo, True, self.tamanho]
                 self.__jogador.partidas.append(dados)
                 self.__jogadas_computador = []
                 self.__jogadas_player = []
@@ -226,7 +226,7 @@ class ControladorPartida:
             if self.score_computador == 41:
                 self.pontuacao(self.score_player)
                 self.tela_oceano.mostra_mensagem("Você Perdeu a Batalha!")
-                dados = list(self.oceano_player, self.oceano_modelo, False)
+                dados = list(self.oceano_player.mapa, self.oceano_modelo, False)
                 self.__jogador.partidas.append(dados)
                 self.__jogadas_computador = []
                 self.__jogadas_player = []

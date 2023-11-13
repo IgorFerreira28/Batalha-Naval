@@ -67,7 +67,7 @@ class TelaJogador():
     except ValueError as ve:
       print(f"Erro: {ve}. Por favor, tente novamente.") 
 
-  def mostra_historico(tamanho, oceano):
+  def mostra_historico(self, tamanho, oceano):
     for linha in range(tamanho):
           if linha == 0:
               print(f'Y/X   {linha}', end='   ')

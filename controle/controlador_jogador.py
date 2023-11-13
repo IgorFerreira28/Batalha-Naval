@@ -79,7 +79,9 @@ class ControladorJogador:
             for i in range(len(jogador.partidas)):
                 self.tela_jogador.mostra_mensagem(f"--> Partida Número {i+1}")
             num = self.tela_jogador.seleciona_partida()
+            self.tela_jogador.mostra_mensagem("---- Oceano do Jogador ----")
             self.tela_jogador.mostra_historico(jogador.partidas[num-1][3], jogador.partidas[num-1][0])
+            self.tela_jogador.mostra_mensagem("---- Jogadas Realizadas ----")
             self.tela_jogador.mostra_historico(jogador.partidas[num-1][3], jogador.partidas[num-1][1])
             if jogador.partidas[num-1][2]:
                 self.tela_jogador.mostra_mensagem(f"O {jogador.nome} venceu a partida")
@@ -101,9 +103,10 @@ class ControladorJogador:
     def get_rank(self):
         players = self.lista_jogadores
         players.sort(key=lambda players: players.pontuacao)
-        
+        players = players[::-1]
+        self.tela_jogador.mostra_mensagem("---- RANK ----")
         for i in range(len(players)):
-            self.tela_jogador.mostra_rank(f'{i+1}º - {players.nome} Pontuação: {players.pontuacao}')
+            self.tela_jogador.mostra_rank(f'{i+1}º - {players[i].nome} Pontuação: {players[i].pontuacao}')
 
     def retornar(self):
         self.controlador_geral.abre_tela()
