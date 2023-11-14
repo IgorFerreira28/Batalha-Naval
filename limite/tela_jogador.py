@@ -7,7 +7,7 @@ class TelaJogador():
 
   def tela_opcoes(self):
     self.init_opcoes()
-    button, values = self.open()
+    button, values = self.__window.Read()
     if values['1']:
       opcao = 1
     if values['2']:
@@ -30,14 +30,14 @@ class TelaJogador():
   def init_opcoes(self):
     sg.ChangeLookAndFeel('DarkTeal4')
     layout = [
-      [sg.Text('-------- Tela Jogador ----------', font=("Helvica", 25))],
+      [sg.Text('---------- Tela Jogador ----------', font=("Helvica", 25))],
       [sg.Text('Escolha sua opção', font=("Helvica", 15))],
       [sg.Radio('Incluir Jogador', "RD1", key='1')],
       [sg.Radio('Alterar Jogador', "RD1", key='2')],
       [sg.Radio('Listar Jogadores', "RD1", key='3')],
       [sg.Radio('Mostrar Histórico', "RD1", key='4')],
       [sg.Radio('Mostrar Ranking dos Jogadores', "RD1", key='5')],
-      [sg.Radio('Seção de Partida', "RD1", key='6')]
+      [sg.Radio('Seção de Partida', "RD1", key='6')],
       [sg.Radio('Excluir Jogador', "RD1", key='7')],
       [sg.Radio('Retornar', "RD1", key='0')],
       [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
@@ -45,28 +45,23 @@ class TelaJogador():
     self.__window = sg.Window('Sistema de Jogadores').Layout(layout)
   
   def dados_jogador(self):
-    print("-------- DADOS JOGADOR ----------")
-    while True:
-        try:
-            nome = input("Nome: ")
-            if not nome:
-                raise ValueError("O nome não pode ser vazio.")
-            
-            data_nascimento = input("Data de nascimento: ")
-            if not data_nascimento:
-                raise ValueError("A data de nascimento não pode ser vazia.")
-            
-            id = int(input("ID: "))
-            if not id:
-                raise ValueError("O ID não pode ser vazio.")
-            
-            if isinstance(id, str):
-               raise ValueError("O ID deve ser um numero inteiro")
-            
-            return {"nome": nome, "data_nascimento": data_nascimento, "id": id}
-        except ValueError as ve:
-            print(f"Erro: {ve}. Por favor, tente novamente.")
+    sg.ChangeLookAndFeel('DarkTeal4')
+    layout = [
+      [sg.Text('-------- DADOS JOGADOR ----------', font=("Helvica", 25))],
+      [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='nome')],
+      [sg.Text('Data Nascimento:', size=(15, 1)), sg.InputText('', key='data_nascimento')],
+      [sg.Text('ID:', size=(15, 1)), sg.InputText('', key='id')],
+      [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+    ]
+    self.__window = sg.Window('Sistema de Cadastro').Layout(layout)
 
+    button, values = self.open()
+    nome = values['nome']
+    data_nascimento = values['data_nascimento']
+    id = int(values['id'])
+
+    self.close()
+    return {"nome": nome, "data_nascimento": data_nascimento, "id": id}
 
   def seleciona_jogador(self):
     try:
@@ -81,10 +76,13 @@ class TelaJogador():
        print(f"Erro: {ve}. Por favor, tente novamente.")
   
   def mostra_jogador(self, dados_jogador):
-    print("NOME DO JOGADOR: ", dados_jogador["nome"])
-    print("NASCIMENTO DO JOGADOR: ", dados_jogador["data_nascimento"])
-    print("ID DO JOGADOR: ", dados_jogador["id"])
-    print("\n")
+    string_todos_jogadores = ""
+    for dado in dados_jogador:
+      string_todos_jogadores = string_todos_jogadores + "NOME: " + dado["nome"] + '\n'
+      string_todos_jogadores = string_todos_jogadores + "NASCIMENTO DO JOGADOR: " + str(dado["data_nascimento"]) + '\n'
+      string_todos_jogadores = string_todos_jogadores + "ID DO JOGADOR: " + str(dado["id"]) + '\n\n'
+
+    sg.Popup('-------- LISTA DE JOGADORES ----------', string_todos_jogadores)
 
   def seleciona_partida(self):
     try:
@@ -112,8 +110,21 @@ class TelaJogador():
                   print(f'[{oceano[linha][coluna]}]', end=' ')
           print()
 
-  def mostra_rank(self, rank):
-    print(rank)
+  def mostra_rank(self, rank_info):
+    layout = [
+            [sg.Text('---- RANK ----', font=("Helvica", 25))],
+            *[[sg.Text(f'{pos}º - {nome} Pontuação: {pontuacao}')] for pos, nome, pontuacao in rank_info],
+            [sg.Button('OK')]
+        ]
+    window = sg.Window('Ranking', layout)
+
+    while True:
+        event, values = window.read()
+
+        if event in (sg.WIN_CLOSED, 'OK'):
+            break
+    
+    window.close()
   
   def mostra_mensagem(self, msg):
     sg.popup("", msg)

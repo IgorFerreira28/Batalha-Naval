@@ -102,11 +102,9 @@ class ControladorJogador:
 
     def get_rank(self):
         players = self.lista_jogadores
-        players.sort(key=lambda players: players.pontuacao)
-        players = players[::-1]
-        self.tela_jogador.mostra_mensagem("---- RANK ----")
-        for i in range(len(players)):
-            self.tela_jogador.mostra_rank(f'{i+1}º - {players[i].nome} Pontuação: {players[i].pontuacao}')
+        players.sort(key=lambda player: player.pontuacao, reverse=True)
+        rank_info = [(i+1, player.nome, player.pontuacao) for i, player in enumerate(players)]
+        self.tela_jogador.mostra_rank(rank_info)
 
     def retornar(self):
         self.controlador_geral.abre_tela()

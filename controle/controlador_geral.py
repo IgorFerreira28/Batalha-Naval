@@ -42,4 +42,4 @@ class ControladorGeral:
                 funcao_escolhida = lista_opcoes[opcao_escolhida]
                 funcao_escolhida()
             except KeyError:
-                print("Opção inválida. Por favor, escolha uma opção válida.")
+                self.__tela_geral.mostra_mensagem("Opção inválida. Por favor, escolha uma opção válida.")
