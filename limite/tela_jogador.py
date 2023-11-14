@@ -1,18 +1,48 @@
-class TelaJogador():
-  def tela_opcoes(self):
-    print("-------- Tela Jogador --------")
-    print("Escolha uma opçâo")
-    print("1 - Incluir Jogador")
-    print("2 - Alterar Jogador")
-    print("3 - Listar Jogadores")
-    print("4 - Mostrar Histórico")
-    print("5 - Mostrar Ranking dos jogadores")
-    print("6 - Seção de Partida")
-    print("7 - Excluir ")
-    print("0 - Retornar")
+import PySimpleGUI as sg
 
-    opcao = int(input("Escolha a opção: "))
+class TelaJogador():
+  def __init__(self):
+     self.__window = None
+     self.init_opcoes()
+
+  def tela_opcoes(self):
+    self.init_opcoes()
+    button, values = self.open()
+    if values['1']:
+      opcao = 1
+    if values['2']:
+      opcao = 2
+    if values['3']:
+      opcao = 3
+    if values['4']:
+      opcao = 4
+    if values['5']:
+       opcao = 5
+    if values['6']:
+       opcao = 6
+    if values['7']:
+       opcao = 7
+    if values['0'] or button in (None, 'Cancelar'):
+      opcao = 0
+    self.close()
     return opcao
+  
+  def init_opcoes(self):
+    sg.ChangeLookAndFeel('DarkTeal4')
+    layout = [
+      [sg.Text('-------- Tela Jogador ----------', font=("Helvica", 25))],
+      [sg.Text('Escolha sua opção', font=("Helvica", 15))],
+      [sg.Radio('Incluir Jogador', "RD1", key='1')],
+      [sg.Radio('Alterar Jogador', "RD1", key='2')],
+      [sg.Radio('Listar Jogadores', "RD1", key='3')],
+      [sg.Radio('Mostrar Histórico', "RD1", key='4')],
+      [sg.Radio('Mostrar Ranking dos Jogadores', "RD1", key='5')],
+      [sg.Radio('Seção de Partida', "RD1", key='6')]
+      [sg.Radio('Excluir Jogador', "RD1", key='7')],
+      [sg.Radio('Retornar', "RD1", key='0')],
+      [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+    ]
+    self.__window = sg.Window('Sistema de Jogadores').Layout(layout)
   
   def dados_jogador(self):
     print("-------- DADOS JOGADOR ----------")
@@ -86,4 +116,11 @@ class TelaJogador():
     print(rank)
   
   def mostra_mensagem(self, msg):
-    print(msg)
+    sg.popup("", msg)
+
+  def close(self):
+    self.__window.Close()
+
+  def open(self):
+    button, values = self.__window.Read()
+    return button, values
