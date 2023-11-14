@@ -1,13 +1,35 @@
-class TelaOceano:
-    def tela_opcoes(self):
-        print("-------- Tela Oceano --------")
-        print("Escolha Uma Opção")
-        print("1 - Realizar Jogada")
-        print("2 - Mostrar Jogadas")
-        print("3 - Mostrar Meu Oceano")
+import PySimpleGUI as sg
 
-        opcao = int(input("Escolha a opção: "))
+
+class TelaOceano:
+    def __init__(self):
+        self.__window = None
+        self.init_opcoes()
+
+    def tela_opcoes(self):
+        self.init_opcoes()
+        button, values = self.__window.Read()
+        if values['1']:
+            opcao = 1
+        if values['0'] or button in (None, 'Cancelar'):
+            opcao = 0
+        self.close()
         return opcao
+    
+    def close(self):
+        self.__window.Close()
+    
+    def init_opcoes(self):
+        sg.ChangeLookAndFeel('DarkTeal4')
+        layout = [
+            [sg.Text('-------- TELA OCEANO ---------', font=("Helvica",25))],
+            [sg.Text('Escolha sua opção', font=("Helvica",15))],
+            [sg.Radio('Realizar Jogada',"RD1", key='1')],
+            [sg.Radio('Mostrar Jogadas',"RD1", key='2')],
+            [sg.Radio('Mostrar Meu Oceano',"RD1", key='3')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window('Jogo de Batalha Naval').Layout(layout)
 
     def posiciona_navios(self):
         print("---Posicionando Navios---")
