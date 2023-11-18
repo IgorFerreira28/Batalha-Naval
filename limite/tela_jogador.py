@@ -3,27 +3,19 @@ import PySimpleGUI as sg
 class TelaJogador():
   def __init__(self):
      self.__window = None
-     self.init_opcoes()
 
   def tela_opcoes(self):
     self.init_opcoes()
-    button, values = self.__window.Read()
-    if values['1']:
-      opcao = 1
-    if values['2']:
-      opcao = 2
-    if values['3']:
-      opcao = 3
-    if values['4']:
-      opcao = 4
-    if values['5']:
-       opcao = 5
-    if values['6']:
-       opcao = 6
-    if values['7']:
-       opcao = 7
-    if values['0'] or button in (None, 'Cancelar'):
-      opcao = 0
+    while True:
+      event, values = self.__window.read()
+
+      if event == sg.WIN_CLOSED or event == 'Cancelar':
+        opcao = 0
+        break
+      elif any(values.values()):
+        opcao = next((int(key) for key, value in values.items() if value), None)
+        break
+
     self.close()
     return opcao
   
@@ -45,23 +37,50 @@ class TelaJogador():
     self.__window = sg.Window('Sistema de Jogadores').Layout(layout)
   
   def dados_jogador(self):
-    sg.ChangeLookAndFeel('DarkTeal4')
     layout = [
       [sg.Text('-------- DADOS JOGADOR ----------', font=("Helvica", 25))],
       [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='nome')],
-      [sg.Text('Data Nascimento:', size=(15, 1)), sg.InputText('', key='data_nascimento')],
+      [sg.Text('Data Nascimento (dd/mm/yyyy):', size=(15, 1)), sg.InputText('', key='data_nascimento')],
       [sg.Text('ID:', size=(15, 1)), sg.InputText('', key='id')],
       [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
     ]
-    self.__window = sg.Window('Sistema de Cadastro').Layout(layout)
+    window = sg.Window('Sistema de Cadastro', layout)
 
-    button, values = self.open()
-    nome = values['nome']
-    data_nascimento = values['data_nascimento']
-    id = int(values['id'])
+    while True:
+      event, values = window.Read()
 
-    self.close()
-    return {"nome": nome, "data_nascimento": data_nascimento, "id": id}
+      if event in (None, 'Cancelar'):
+        window.close()
+        return None
+
+      try:
+        nome = values['nome']
+        data_nascimento = self.validar_data(values['data_nascimento'])
+        jogador_id = values['id']
+
+        if not nome or not data_nascimento or jogador_id == "":
+          raise ValueError("Todos os campos devem ser preenchidos.")
+        try:
+          jogador_id = int(jogador_id)
+        except ValueError:
+          raise ValueError("O ID deve ser um número inteiro.")
+
+        sg.popup(f"Informações do Jogador: Nome={nome}, Data Nascimento={data_nascimento}, ID={jogador_id}")
+        window.close()
+        return {"nome": nome, "data_nascimento": data_nascimento, "id": jogador_id}
+
+      except ValueError as ve:
+        sg.popup_error(f"Erro: {ve}")
+
+      window.close()
+
+  def validar_data(self, data_str):
+      try:
+        dia, mes, ano = map(int, data_str.split('/'))
+        data = f'{dia:02d}/{mes:02d}/{ano:04d}'
+        return data
+      except ValueError:
+        raise ValueError("Formato de data inválido. Use dd/mm/yyyy.")
 
   def seleciona_jogador(self):
     try:

@@ -17,11 +17,36 @@ class TelaPartida:
         return opcao
     
     def comecar_partida(self):
-        print("-------- Início Partida --------")
-        id = int(input("Digite o ID do jogador que jogará está partida: "))
-        tamanho_oceano = int(input("Tamanho do oceano: "))
+        layout = [
+            [sg.Text('-------- Início Partida --------')],
+            [sg.Text('Digite o ID do jogador que jogará esta partida:'), sg.InputText(key='id')],
+            [sg.Text('Tamanho do oceano:'), sg.InputText(key='tamanho_oceano')],
+            [sg.Submit(), sg.Cancel()]
+        ]
 
-        return {"id": id, "tamanho_oceano": tamanho_oceano}
+        window = sg.Window('Início da Partida', layout)
+
+        while True:
+            event, values = window.Read()
+
+            if event in (None, 'Cancel'):
+                break
+
+            try:
+                jogador_id = int(values['id'])
+                tamanho_oceano = int(values['tamanho_oceano'])
+
+                if jogador_id is None or tamanho_oceano is None:
+                    raise ValueError("O ID do jogador e o tamanho do oceano não podem ser vazios.")
+
+                sg.popup(f"Informações da Partida: ID do Jogador={jogador_id}, Tamanho do Oceano={tamanho_oceano}")
+                window.close()
+                return {"id": jogador_id, "tamanho_oceano": tamanho_oceano}
+
+            except ValueError as ve:
+                sg.popup_error(f"Erro: {ve}")
+
+        window.close()
     
     def mostra_mensagem(self, msg):
         return msg
