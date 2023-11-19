@@ -8,11 +8,15 @@ class TelaOceano:
 
     def tela_opcoes(self):
         self.init_opcoes()
-        button, values = self.__window.Read()
-        if values['1']:
-            opcao = 1
-        if values['0'] or button in (None, 'Cancelar'):
-            opcao = 0
+        while True:
+            event, values = self.__window.read()
+
+            if event == sg.WIN_CLOSED or event == 'Cancelar':
+                opcao = 0
+                break
+            elif any(values.values()):
+                opcao = next((int(key) for key, value in values.items() if value), None)
+                break
         self.close()
         return opcao
     

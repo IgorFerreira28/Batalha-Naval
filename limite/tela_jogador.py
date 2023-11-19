@@ -18,7 +18,7 @@ class TelaJogador():
 
     self.close()
     return opcao
-  
+
   def init_opcoes(self):
     sg.ChangeLookAndFeel('DarkTeal4')
     layout = [
@@ -35,50 +35,52 @@ class TelaJogador():
       [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
     ]
     self.__window = sg.Window('Sistema de Jogadores').Layout(layout)
-  
+
   def dados_jogador(self):
     layout = [
-      [sg.Text('-------- DADOS JOGADOR ----------', font=("Helvica", 25))],
-      [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='nome')],
-      [sg.Text('Data Nascimento:', size=(15, 1)), sg.CalendarButton('Escolher Data', target='data_nascimento', format='%d/%m/%Y', key='data_nascimento')],
-      [sg.Text('ID:', size=(15, 1)), sg.InputText('', key='id')],
-      [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        [sg.Text('-------- DADOS JOGADOR ----------', font=("Helvica", 25))],
+        [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='nome')],
+        [sg.Text('Data Nascimento:', size=(15, 1)), sg.CalendarButton('Escolher Data', target='data_nascimento', format='%d/%m/%Y', key='data_nascimento')],
+        [sg.Text('ID:', size=(15, 1)), sg.InputText('', key='id')],
+        [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
     ]
     window = sg.Window('Sistema de Cadastro', layout)
 
     while True:
-      event, values = window.Read()
+        event, values = window.Read()
 
-      if event in (None, 'Cancelar'):
-        window.close()
-        return None
+        if event in (None, 'Cancelar'):
+            window.close()
+            return None
 
-      try:
-        nome = values['nome']
-        data_nascimento = values['data_nascimento']
-        jogador_id = values['id']
+        if event == 'Confirmar':
+            try:
+                nome = values['nome']
+                data_nascimento = values['data_nascimento']
+                jogador_id = values['id']
 
-        if not nome or not data_nascimento or jogador_id == "":
-          raise ValueError("Todos os campos devem ser preenchidos.")
-        try:
-          jogador_id = int(jogador_id)
-        except ValueError:
-          raise ValueError("O ID deve ser um número inteiro.")
+                if not nome or not data_nascimento or jogador_id == "":
+                    raise ValueError("Todos os campos devem ser preenchidos.")
 
-        sg.popup(f"Informações do Jogador: Nome={nome}, Data Nascimento={data_nascimento}, ID={jogador_id}")
-        window.close()
-        return {"nome": nome, "data_nascimento": data_nascimento, "id": jogador_id}
+                try:
+                    jogador_id = int(jogador_id)
+                except ValueError:
+                    raise ValueError("O ID deve ser um número inteiro.")
 
-      except ValueError as ve:
-        sg.popup_error(f"Erro: {ve}")
+                sg.popup(f"Informações do Jogador: Nome={nome}, Data Nascimento={data_nascimento}, ID={jogador_id}")
+                window.close()
+                return {"nome": nome, "data_nascimento": data_nascimento, "id": jogador_id}
 
-      window.close()
+            except ValueError as ve:
+                sg.popup_error(f"Erro: {ve}")
+
+    window.close()
 
   def seleciona_jogador(self, lista_jogadores):
     if not lista_jogadores:
       sg.popup("Não há jogadores disponíveis. Adicione jogadores antes de prosseguir.")
       return None
-    
+
     jogadores = [(jogador.id, jogador.nome) for jogador in lista_jogadores]
 
     layout = [
@@ -107,7 +109,7 @@ class TelaJogador():
             sg.popup_error("Por favor, selecione um jogador.")
 
     window.close()
-  
+
   def mostra_jogador(self, dados_jogador):
     string_todos_jogadores = ""
     for dado in dados_jogador:
@@ -156,9 +158,9 @@ class TelaJogador():
 
         if event in (sg.WIN_CLOSED, 'OK'):
             break
-    
+
     window.close()
-  
+
   def mostra_mensagem(self, msg):
     sg.popup("", msg)
 
