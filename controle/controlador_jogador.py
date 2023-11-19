@@ -48,7 +48,7 @@ class ControladorJogador:
 
     def alterar_jogador(self):
         self.listar_jogadores()
-        id_jogador = self.tela_jogador.seleciona_jogador()
+        id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores)
         player = self.pega_jogador_por_id(id_jogador)
         livre = True
         if (player is not None):
@@ -61,8 +61,6 @@ class ControladorJogador:
                 player.nome = novo_player["nome"]
                 player.data_nascimento = novo_player["data_nascimento"]
                 player.id = novo_player["id"]
-        else:
-            self.tela_jogador.mostra_mensagem("ATENÇÃO: Esse Jogador Não Existe")
 
     def listar_jogadores(self):
         for jogador in self.lista_jogadores:
@@ -70,7 +68,7 @@ class ControladorJogador:
 
     def historico_partidas(self):
         self.listar_jogadores()
-        id_jogador = self.tela_jogador.seleciona_jogador()
+        id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores)
         jogador = self.pega_jogador_por_id(id_jogador)
         if jogador is not None:
             self.tela_jogador.mostra_mensagem(f"O {jogador.nome}, tem {len(jogador.partidas)} partidas em seu histórico")
@@ -93,12 +91,10 @@ class ControladorJogador:
 
     def deletar_jogador(self):
         self.listar_jogadores()
-        id_jogador = self.tela_jogador.seleciona_jogador() 
+        id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores) 
         jogador = self.pega_jogador_por_id(id_jogador)
         if jogador is not None:
             self.lista_jogadores.remove(jogador)
-        else:
-            self.tela_jogador.mostra_mensagem("Esse Jogador Não Existe Para Ser Apagado!")
 
     def get_rank(self):
         players = self.lista_jogadores

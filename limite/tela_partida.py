@@ -20,7 +20,8 @@ class TelaPartida:
         layout = [
             [sg.Text('-------- Início Partida --------')],
             [sg.Text('Digite o ID do jogador que jogará esta partida:'), sg.InputText(key='id')],
-            [sg.Text('Tamanho do oceano:'), sg.InputText(key='tamanho_oceano')],
+            [sg.Text('Escolha o tamanho do oceano:')],
+            [sg.Radio('Fácil', "TAMANHO_OCEANO", key='facil'), sg.Radio('Difícil', "TAMANHO_OCEANO", key='dificil')],
             [sg.Submit(), sg.Cancel()]
         ]
 
@@ -34,7 +35,7 @@ class TelaPartida:
 
             try:
                 jogador_id = int(values['id'])
-                tamanho_oceano = int(values['tamanho_oceano'])
+                tamanho_oceano = 5 if values['facil'] else 10
 
                 if jogador_id is None or tamanho_oceano is None:
                     raise ValueError("O ID do jogador e o tamanho do oceano não podem ser vazios.")

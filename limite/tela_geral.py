@@ -19,7 +19,7 @@ class TelaGeral:
     def init_opcoes(self):
         sg.ChangeLookAndFeel('DarkTeal4')
         layout = [
-            [sg.Text('-------- MENU INICIAL ---------', font=("Helvica",25))],
+            [sg.Text('--------- MENU INICIAL ---------', font=("Helvica",25))],
             [sg.Text('Escolha sua opção', font=("Helvica",15))],
             [sg.Radio('Cadastrar Jogador',"RD1", key='1')],
             [sg.Radio('Finalizar sistema',"RD1", key='0')],

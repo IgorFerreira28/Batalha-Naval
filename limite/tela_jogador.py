@@ -40,7 +40,7 @@ class TelaJogador():
     layout = [
       [sg.Text('-------- DADOS JOGADOR ----------', font=("Helvica", 25))],
       [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='nome')],
-      [sg.Text('Data Nascimento (dd/mm/yyyy):', size=(15, 1)), sg.InputText('', key='data_nascimento')],
+      [sg.Text('Data Nascimento:', size=(15, 1)), sg.CalendarButton('Escolher Data', target='data_nascimento', format='%d/%m/%Y', key='data_nascimento')],
       [sg.Text('ID:', size=(15, 1)), sg.InputText('', key='id')],
       [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
     ]
@@ -55,7 +55,7 @@ class TelaJogador():
 
       try:
         nome = values['nome']
-        data_nascimento = self.validar_data(values['data_nascimento'])
+        data_nascimento = values['data_nascimento']
         jogador_id = values['id']
 
         if not nome or not data_nascimento or jogador_id == "":
@@ -74,25 +74,39 @@ class TelaJogador():
 
       window.close()
 
-  def validar_data(self, data_str):
-      try:
-        dia, mes, ano = map(int, data_str.split('/'))
-        data = f'{dia:02d}/{mes:02d}/{ano:04d}'
-        return data
-      except ValueError:
-        raise ValueError("Formato de data inválido. Use dd/mm/yyyy.")
+  def seleciona_jogador(self, lista_jogadores):
+    if not lista_jogadores:
+      sg.popup("Não há jogadores disponíveis. Adicione jogadores antes de prosseguir.")
+      return None
+    
+    jogadores = [(jogador.id, jogador.nome) for jogador in lista_jogadores]
 
-  def seleciona_jogador(self):
-    try:
-      id = int(input('Digite o ID do jogador que deseja selecionar: '))
-      if not id:
-         raise ValueError("O ID não pode ser vazio.")
-      
-      if isinstance(id, str):
-         raise ValueError("O ID deve ser um numero inteiro")
-      return id
-    except ValueError as ve:
-       print(f"Erro: {ve}. Por favor, tente novamente.")
+    layout = [
+        [sg.Text('Selecione um jogador:')],
+        [sg.Listbox(values=jogadores, size=(30, 6), key='jogadores')],
+        [sg.Button('OK')]
+    ]
+
+    window = sg.Window('Selecionar Jogador', layout)
+
+    while True:
+        event, values = window.read()
+
+        if event == sg.WIN_CLOSED:
+            window.close()
+            return None
+
+        try:
+            jogador_selecionado = values['jogadores'][0]
+            jogador_id = int(jogador_selecionado[0])
+
+            window.close()
+            return jogador_id
+
+        except (IndexError, ValueError):
+            sg.popup_error("Por favor, selecione um jogador.")
+
+    window.close()
   
   def mostra_jogador(self, dados_jogador):
     string_todos_jogadores = ""
