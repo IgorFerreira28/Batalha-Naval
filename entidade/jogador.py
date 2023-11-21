@@ -41,3 +41,20 @@ class Jogador:
     @property
     def partidas(self):
         return self.__partidas
+    
+    def serialize(self):
+        return {
+            'nome': self.__nome,
+            'data_nascimento': self.__data_nascimento,
+            'id': self.__id,
+            'pontuacao': self.__pontuacao,
+            'partidas': self.__partidas
+        }
+
+    # Adicione um método de classe para criar um objeto Jogador a partir de uma serialização
+    @classmethod
+    def deserialize(cls, data):
+        jogador = cls(data['nome'], data['data_nascimento'], data['id'])
+        jogador.__pontuacao = data['pontuacao']
+        jogador.__partidas = data['partidas']
+        return jogador
