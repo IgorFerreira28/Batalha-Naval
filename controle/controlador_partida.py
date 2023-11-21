@@ -129,7 +129,7 @@ class ControladorPartida:
         self.__oceano_modelo = oceano
 
     def comecar_partida(self):
-        info = self.__tela_partida.comecar_partida()
+        info = self.__tela_partida.comecar_partida(self.__controlador_geral.controlador_jogador.lista_jogadores)
         self.__jogador = self.__controlador_geral.controlador_jogador.pega_jogador_por_id(info["id"])
         tamanho_oceano = int(info["tamanho_oceano"])
         self.__tamanho = tamanho_oceano

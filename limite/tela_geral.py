@@ -17,7 +17,7 @@ class TelaGeral:
         return opcao
 
     def init_opcoes(self):
-        sg.ChangeLookAndFeel('DarkTeal4')
+        sg.ChangeLookAndFeel('LightBlue')
         layout = [
             [sg.Text('--------- MENU INICIAL ---------', font=("Helvica",25))],
             [sg.Text('Escolha sua opção', font=("Helvica",15))],

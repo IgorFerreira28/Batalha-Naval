@@ -16,12 +16,13 @@ class TelaPartida:
         self.close()
         return opcao
     
-    def comecar_partida(self):
+    def comecar_partida(self, lista_jogadores):
         layout = [
             [sg.Text('-------- Início Partida --------')],
-            [sg.Text('Digite o ID do jogador que jogará esta partida:'), sg.InputText(key='id')],
-            [sg.Text('Escolha o tamanho do oceano:')],
-            [sg.Radio('Fácil', "TAMANHO_OCEANO", key='facil'), sg.Radio('Difícil', "TAMANHO_OCEANO", key='dificil')],
+            [sg.Text('Escolha o jogador que jogará esta partida:')],
+            [sg.Listbox(values=[f'{jogador.nome} - ID: {jogador.id}' for jogador in lista_jogadores], size=(30, 5), key='jogadores')],
+            [sg.Text('Escolha o Modo de Jogo:')],
+            [sg.Radio('Curto', "TAMANHO_OCEANO", key='curto'), sg.Radio('Longo', "TAMANHO_OCEANO", key='longo')],
             [sg.Submit(), sg.Cancel()]
         ]
 
@@ -34,26 +35,24 @@ class TelaPartida:
                 break
 
             try:
-                jogador_id = int(values['id'])
-                tamanho_oceano = 5 if values['facil'] else 10
+                selected_player_info = values['jogadores'][0].split('- ID: ')
+                jogador_id = int(selected_player_info[1])
+                tamanho_oceano = 5 if values['curto'] else 10
 
-                if jogador_id is None or tamanho_oceano is None:
-                    raise ValueError("O ID do jogador e o tamanho do oceano não podem ser vazios.")
-
-                sg.popup(f"Informações da Partida: ID do Jogador={jogador_id}, Tamanho do Oceano={tamanho_oceano}")
+                sg.popup(f"Informações da Partida: Jogador={selected_player_info[0]}, ID={jogador_id}, Tamanho do Oceano={tamanho_oceano}")
                 window.close()
                 return {"id": jogador_id, "tamanho_oceano": tamanho_oceano}
 
-            except ValueError as ve:
+            except (ValueError, IndexError) as ve:
                 sg.popup_error(f"Erro: {ve}")
 
         window.close()
-    
+
     def mostra_mensagem(self, msg):
-        return msg
+        sg.popup(msg)
 
     def init_opcoes(self):
-        sg.ChangeLookAndFeel('DarkTeal4')
+        sg.ChangeLookAndFeel('LightBlue')
         layout = [
             [sg.Text('-------- TELA PARTIDA ---------', font=("Helvica",25))],
             [sg.Text('Escolha sua opção', font=("Helvica",15))],

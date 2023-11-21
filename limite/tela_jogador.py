@@ -20,7 +20,7 @@ class TelaJogador():
     return opcao
 
   def init_opcoes(self):
-    sg.ChangeLookAndFeel('DarkTeal4')
+    sg.ChangeLookAndFeel('LightBlue')
     layout = [
       [sg.Text('---------- Tela Jogador ----------', font=("Helvica", 25))],
       [sg.Text('Escolha sua opção', font=("Helvica", 15))],
@@ -101,7 +101,6 @@ class TelaJogador():
         try:
             jogador_selecionado = values['jogadores'][0]
             jogador_id = int(jogador_selecionado[0])
-
             window.close()
             return jogador_id
 
@@ -111,39 +110,64 @@ class TelaJogador():
     window.close()
 
   def mostra_jogador(self, dados_jogador):
-    string_todos_jogadores = ""
-    for dado in dados_jogador:
-      string_todos_jogadores = string_todos_jogadores + "NOME: " + dado["nome"] + '\n'
-      string_todos_jogadores = string_todos_jogadores + "NASCIMENTO DO JOGADOR: " + str(dado["data_nascimento"]) + '\n'
-      string_todos_jogadores = string_todos_jogadores + "ID DO JOGADOR: " + str(dado["id"]) + '\n\n'
+    layout = [
+            [sg.Text('-------- LISTA DE JOGADORES ----------')],
+            *[
+                [sg.Text(f"NOME: {dado['nome']}"), sg.Text(f"NASCIMENTO DO JOGADOR: {dado['data_nascimento']}"),
+                 sg.Text(f"ID DO JOGADOR: {dado['id']}")] for dado in dados_jogador
+            ],
+            [sg.Button('OK')]
+        ]
 
-    sg.Popup('-------- LISTA DE JOGADORES ----------', string_todos_jogadores)
+    window = sg.Window('Lista de Jogadores', layout)
 
-  def seleciona_partida(self):
-    try:
-      num = int(input("Selecione um número entre as opções: "))
-      if not num:
-        raise ValueError("O Número não pode ser vazio.")
-      if isinstance(num, str):
-        raise ValueError("O Número deve ser um número.")
-      return num
-    except ValueError as ve:
-      print(f"Erro: {ve}. Por favor, tente novamente.") 
+    while True:
+      event, values = window.read()
+
+      if event == sg.WIN_CLOSED or event == 'OK':
+        break
+
+    window.close()
+
+  def seleciona_partida(self, partidas):
+    layout = [
+            [sg.Text('Selecione uma partida:')],
+            [sg.Listbox(values=partidas, size=(30, 5), key='PARTIDAS')],
+            [sg.Button('OK')]
+        ]
+
+    window = sg.Window('Selecionar Partida', layout)
+
+    while True:
+      event, values = window.read()
+
+      if event == sg.WIN_CLOSED or event == 'OK':
+        selected_index = values['PARTIDAS'][0] if values['PARTIDAS'] else None
+        window.close()
+        return selected_index
+
+    window.close()
 
   def mostra_historico(self, tamanho, oceano):
+    layout = [
+            [sg.Text('---Histórico do Oceano---')]
+        ]
+
     for linha in range(tamanho):
-          if linha == 0:
-              print(f'Y/X   {linha}', end='   ')
-          else:
-            print(f'{linha}', end='   ')
-    print()
-    for linha in range(tamanho):
-          for coluna in range(tamanho):
-              if coluna == 0:
-                  print(f' {linha}   [{oceano[linha][coluna]}]', end=' ')
-              else:
-                  print(f'[{oceano[linha][coluna]}]', end=' ')
-          print()
+      linha_layout = []
+      for coluna in range(tamanho):
+        linha_layout.append(sg.Text(f'[{oceano[linha][coluna]}]', size=(5, 1), key=f'pos_{linha}_{coluna}'))
+      layout.append(linha_layout)
+
+    window = sg.Window('Histórico', layout)
+
+    while True:
+      event, values = window.read()
+
+      if event == sg.WIN_CLOSED:
+        break
+
+    window.close()
 
   def mostra_rank(self, rank_info):
     layout = [

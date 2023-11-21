@@ -24,7 +24,7 @@ class TelaOceano:
         self.__window.Close()
     
     def init_opcoes(self):
-        sg.ChangeLookAndFeel('DarkTeal4')
+        sg.ChangeLookAndFeel('LightBlue')
         layout = [
             [sg.Text('-------- TELA OCEANO ---------', font=("Helvica",25))],
             [sg.Text('Escolha sua opção', font=("Helvica",15))],

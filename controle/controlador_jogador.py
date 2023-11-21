@@ -47,7 +47,6 @@ class ControladorJogador:
             self.lista_jogadores.append(player)
 
     def alterar_jogador(self):
-        self.listar_jogadores()
         id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores)
         player = self.pega_jogador_por_id(id_jogador)
         livre = True
@@ -63,34 +62,43 @@ class ControladorJogador:
                 player.id = novo_player["id"]
 
     def listar_jogadores(self):
-        for jogador in self.lista_jogadores:
-            self.tela_jogador.mostra_jogador({"nome": jogador.nome, "data_nascimento": jogador.data_nascimento, "id": jogador.id})
+        dados_jogadores = [
+            {"nome": jogador.nome, "data_nascimento": jogador.data_nascimento, "id": jogador.id}
+            for jogador in self.lista_jogadores
+        ]
+        self.tela_jogador.mostra_jogador(dados_jogadores)
 
     def historico_partidas(self):
-        self.listar_jogadores()
         id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores)
         jogador = self.pega_jogador_por_id(id_jogador)
+
         if jogador is not None:
             self.tela_jogador.mostra_mensagem(f"O {jogador.nome}, tem {len(jogador.partidas)} partidas em seu histórico")
+
             if len(jogador.partidas) == 0:
                 self.abre_tela()
-            for i in range(len(jogador.partidas)):
-                self.tela_jogador.mostra_mensagem(f"--> Partida Número {i+1}")
-            num = self.tela_jogador.seleciona_partida()
-            self.tela_jogador.mostra_mensagem("---- Oceano do Jogador ----")
-            self.tela_jogador.mostra_historico(jogador.partidas[num-1][3], jogador.partidas[num-1][0])
-            self.tela_jogador.mostra_mensagem("---- Jogadas Realizadas ----")
-            self.tela_jogador.mostra_historico(jogador.partidas[num-1][3], jogador.partidas[num-1][1])
-            if jogador.partidas[num-1][2]:
-                self.tela_jogador.mostra_mensagem(f"O {jogador.nome} venceu a partida")
-            else:
-                self.tela_jogador.mostra_mensagem(f"O {jogador.nome} perdeu a partida")
+
+            partidas = [f"Partida Número {i + 1}" for i in range(len(jogador.partidas))]
+            selected_partida = self.tela_jogador.seleciona_partida(partidas)
+
+            if selected_partida is not None:
+                num = int(selected_partida.split()[-1])
+
+                self.tela_jogador.mostra_mensagem("---- Oceano do Jogador ----")
+                self.tela_jogador.mostra_historico(jogador.partidas[num - 1][3], jogador.partidas[num - 1][0])
+
+                self.tela_jogador.mostra_mensagem("---- Jogadas Realizadas ----")
+                self.tela_jogador.mostra_historico(jogador.partidas[num - 1][3], jogador.partidas[num - 1][1])
+
+                if jogador.partidas[num - 1][2]:
+                    self.tela_jogador.mostra_mensagem(f"O {jogador.nome} venceu a partida")
+                else:
+                    self.tela_jogador.mostra_mensagem(f"O {jogador.nome} perdeu a partida")
 
     def secao_partida(self):
         self.__controlador_geral.cadastra_partida()
 
     def deletar_jogador(self):
-        self.listar_jogadores()
         id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores) 
         jogador = self.pega_jogador_por_id(id_jogador)
         if jogador is not None:
