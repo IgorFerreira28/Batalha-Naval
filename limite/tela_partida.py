@@ -15,7 +15,7 @@ class TelaPartida:
             opcao = 0
         self.close()
         return opcao
-    
+
     def comecar_partida(self, lista_jogadores):
         layout = [
             [sg.Text('-------- Início Partida --------')],

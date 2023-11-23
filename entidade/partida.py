@@ -63,19 +63,3 @@ class Partida:
     def navios_computador(self, navios):
         if isinstance(navios, list):
             self.__navios_computador = navios
-    
-    @property
-    def oceano_computador(self):
-        return self.__monta_oceano.oceano_computador()
-    
-    @property
-    def posicoes_navios_player(self):
-        return self.__monta_oceano.posicoes_navios_player()
-    
-    @property
-    def posicoes_navios_computador(self):
-        return self.__monta_oceano.posicoes_navios_computador()
-    
-    @property
-    def tamanho(self):
-        return self.__monta_oceano.tamanho_oceano()

@@ -4,20 +4,15 @@ from DAOs.jogador_dao import JogadorDAO
 
 class ControladorJogador:
     def __init__(self, controlador_geral):
-        self.__lista_jogadores = []
+        #self.__lista_jogadores = []
         self.__tela_jogador = TelaJogador()
         self.__controlador_geral = controlador_geral
         self.__jogador_DAO = JogadorDAO()
 
     @property
-    def lista_jogadores(self):
-        return self.__lista_jogadores
+    def jogador_DAO(self):
+        return self.__jogador_DAO
     
-    @lista_jogadores.setter
-    def lista_jogadores(self, lista):
-        if isinstance(lista, list):
-            self.__lista_jogadores = lista
-
     @property
     def tela_jogador(self):
         return self.__tela_jogador
@@ -32,7 +27,7 @@ class ControladorJogador:
         return self.__controlador_geral
     
     def pega_jogador_por_id(self, id):
-        for jogador in self.lista_jogadores:
+        for jogador in self.__jogador_DAO.get_all():
             if(jogador.id == id):
                 return jogador
         return None
@@ -46,16 +41,16 @@ class ControladorJogador:
                 self.tela_jogador.mostra_mensagem("Esse ID ja esta em uso!")
         if livre:
             player = Jogador(dados_jogador["nome"], dados_jogador["data_nascimento"], dados_jogador["id"])
-            self.lista_jogadores.append(player)
+            #self.lista_jogadores.append(player)
             self.__jogador_DAO.add(player)
 
     def alterar_jogador(self):
-        id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores)
+        id_jogador = self.tela_jogador.seleciona_jogador(self.__jogador_DAO.get_all())
         player = self.pega_jogador_por_id(id_jogador)
         livre = True
         if (player is not None):
             novo_player = self.tela_jogador.dados_jogador()
-            for i in self.lista_jogadores:
+            for i in self.__jogador_DAO.get_all():
                 if i.id == novo_player["id"]:
                     self.tela_jogador.mostra_mensagem("ID ja em uso!")
                     livre = False
@@ -68,12 +63,12 @@ class ControladorJogador:
     def listar_jogadores(self):
         dados_jogadores = [
             {"nome": jogador.nome, "data_nascimento": jogador.data_nascimento, "id": jogador.id}
-            for jogador in self.lista_jogadores
+            for jogador in self.__jogador_DAO.get_all()
         ]
         self.tela_jogador.mostra_jogador(dados_jogadores)
 
     def historico_partidas(self):
-        id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores)
+        id_jogador = self.tela_jogador.seleciona_jogador(self.__jogador_DAO.get_all())
         jogador = self.pega_jogador_por_id(id_jogador)
 
         if jogador is not None:
@@ -103,14 +98,14 @@ class ControladorJogador:
         self.__controlador_geral.cadastra_partida()
 
     def deletar_jogador(self):
-        id_jogador = self.tela_jogador.seleciona_jogador(self.lista_jogadores) 
+        id_jogador = self.tela_jogador.seleciona_jogador(self.__jogador_DAO.get_all()) 
         jogador = self.pega_jogador_por_id(id_jogador)
         if jogador is not None:
             self.lista_jogadores.remove(jogador)
             self.__jogador_DAO.remove(jogador)
 
     def get_rank(self):
-        players = self.lista_jogadores
+        players = self.__jogador_DAO.get_all()
         players.sort(key=lambda player: player.pontuacao, reverse=True)
         rank_info = [(i+1, player.nome, player.pontuacao) for i, player in enumerate(players)]
         self.tela_jogador.mostra_rank(rank_info)
