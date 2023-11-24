@@ -5,36 +5,36 @@ class DAO(ABC):
     @abstractmethod
     def __init__(self, datasource=''):
         self.__datasource = datasource
-        self.__cache = {} #é aqui que vai ficar a lista que estava no controlador. Nesse exemplo estamos usando um dicionario
+        self.__cache = {}
         try:
             self.__load()
         except FileNotFoundError:
             self.__dump()
 
     def __dump(self):
-        data = {key: vars(obj) for key, obj in self._DAO__cache.items()}
-        pickle.dump(data, open(self._DAO__datasource, 'wb'))
+        with open(self.__datasource, 'wb') as file:
+            pickle.dump(self.__cache, file)
 
     def __load(self):
         try:
             with open(self.__datasource, 'rb') as file:
-                self.__cache = pickle.load(file)
+                data = pickle.load(file)
+                self.__cache = data
         except Exception as e:
             pass
 
-    #esse método precisa chamar o self.__dump()
     def add(self, key, obj):
         try:
             self.__cache[key] = obj
-            self.__dump()  #atualiza o arquivo depois de add novo amigo
+            self.__dump()
         except KeyError:
             pass
-    #cuidado: esse update só funciona se o objeto com essa chave já existe
+
     def update(self, key, obj):
         try:
             if(self.__cache[key] != None):
-                self.__cache[key] = obj #atualiza a entrada
-                self.__dump()  #atualiza o arquivo
+                self.__cache[key] = obj
+                self.__dump()
         except KeyError as e:
             pass
 
@@ -42,13 +42,12 @@ class DAO(ABC):
         try:
             return self.__cache[key]
         except KeyError:
-            pass #implementar aqui o tratamento da exceção
+            pass
 
-    # esse método precisa chamar o self.__dump()
     def remove(self, key):
         try:
             self.__cache.pop(key)
-            self.__dump() #atualiza o arquivo depois de remover um objeto
+            self.__dump()
         except KeyError:
             pass
 

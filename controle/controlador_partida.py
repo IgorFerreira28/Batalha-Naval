@@ -186,6 +186,7 @@ class ControladorPartida:
                 self.pontuacao(self.score_player)
                 dados = [self.oceano_player.mapa, self.oceano_modelo, True, self.tamanho]
                 self.__jogador.partidas.append(dados)
+                self.__controlador_geral.controlador_jogador.jogador_DAO.update(self.__jogador)
                 self.__jogadas_computador = []
                 self.__jogadas_player = []
                 self.__posicoes_navios_computador = []

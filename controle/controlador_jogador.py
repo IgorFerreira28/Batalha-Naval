@@ -4,7 +4,6 @@ from DAOs.jogador_dao import JogadorDAO
 
 class ControladorJogador:
     def __init__(self, controlador_geral):
-        #self.__lista_jogadores = []
         self.__tela_jogador = TelaJogador()
         self.__controlador_geral = controlador_geral
         self.__jogador_DAO = JogadorDAO()
@@ -35,13 +34,12 @@ class ControladorJogador:
     def inserir_jogador(self):
         dados_jogador = self.tela_jogador.dados_jogador()
         livre = True
-        for i in self.lista_jogadores:
+        for i in self.__jogador_DAO.get_all():
             if i.id == dados_jogador["id"]:
                 livre = False
                 self.tela_jogador.mostra_mensagem("Esse ID ja esta em uso!")
         if livre:
             player = Jogador(dados_jogador["nome"], dados_jogador["data_nascimento"], dados_jogador["id"])
-            #self.lista_jogadores.append(player)
             self.__jogador_DAO.add(player)
 
     def alterar_jogador(self):
@@ -101,7 +99,6 @@ class ControladorJogador:
         id_jogador = self.tela_jogador.seleciona_jogador(self.__jogador_DAO.get_all()) 
         jogador = self.pega_jogador_por_id(id_jogador)
         if jogador is not None:
-            self.lista_jogadores.remove(jogador)
             self.__jogador_DAO.remove(jogador)
 
     def get_rank(self):
