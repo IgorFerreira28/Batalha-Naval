@@ -130,6 +130,9 @@ class ControladorPartida:
 
     def comecar_partida(self):
         info = self.__tela_partida.comecar_partida(self.__controlador_geral.controlador_jogador.jogador_DAO.get_all())
+        if info is None:
+            self.__tela_partida.mostra_mensagem("Cancelado pelo usuário")
+            return
         self.__jogador = self.__controlador_geral.controlador_jogador.pega_jogador_por_id(info["id"])
         tamanho_oceano = int(info["tamanho_oceano"])
         self.__tamanho = tamanho_oceano
@@ -159,11 +162,12 @@ class ControladorPartida:
         while True:
             try:
                 opcao_escolhida = self.__tela_partida.tela_opcoes()
-                funcao_escolhida = lista_opcoes[opcao_escolhida]
-                funcao_escolhida()
-                raise ValueError
+                if opcao_escolhida in lista_opcoes:
+                    lista_opcoes[opcao_escolhida]()
+                else:
+                    self.__tela_partida.mostra_mensagem("Opção inválida. Por favor, escolha uma opção válida.")
             except ValueError:
-                self.__tela_partida.mostra_mensagem("Valor inválido, digite um número Válido")
+                self.__tela_partida.mostra_mensagem("Valor inválido")
 
     def abre_tela_oceano(self):
         lista_opcoes = {1: self.jogada, 2:self.mostrar_jogadas, 3:self.mostrar_oceano}
@@ -171,11 +175,19 @@ class ControladorPartida:
         while True:
             try:
                 opcao_escolhida = self.__tela_oceano.tela_opcoes()
-                funcao_escolhida = lista_opcoes[opcao_escolhida]
-                funcao_escolhida()
-                raise ValueError
+                if opcao_escolhida in lista_opcoes:
+                    lista_opcoes[opcao_escolhida]()
+                if opcao_escolhida is None:
+                    self.__jogadas_player = []
+                    self.__jogadas_computador = []
+                    self.__posicoes_navios_computador = []
+                    self.__posicoes_navios_player = []
+                    self.__score_computador = 0
+                    self.__score_player = 0
+                    self.__tela_oceano.mostra_mensagem("Partida Cancelada!")
+                    self.__controlador_geral.controlador_jogador.abre_tela()
             except ValueError:
-                self.__tela_partida.mostra_mensagem("Valor inválido, digite um número Válido")
+                self.__tela_partida.mostra_mensagem("Valor inválido")
 
     def jogada(self):
         tiro_player = True
@@ -195,6 +207,8 @@ class ControladorPartida:
                 self.__score_player = 0
                 self.__controlador_geral.controlador_jogador.abre_tela()
             jogada = self.tela_oceano.jogada()
+            if jogada is None:
+                return
             tiro = list(jogada)
             if tiro in self.jogadas_player:
                 self.tela_oceano.mostra_mensagem("Você já atirou nessa posição")
@@ -291,6 +305,11 @@ class ControladorPartida:
             lista_temporaria = [1]
             while True:
                 coordenada = self.tela_oceano.posiciona_navios()
+                if coordenada is None:
+                    self.tela_oceano.mostra_mensagem("Cancelado pelo usuário")
+                    self.__posicoes_navios_player = []
+                    self.__posicoes_navios_computador = []
+                    self.__controlador_geral.controlador_jogador.abre_tela()
                 posicao = list(coordenada)
                 posicao_em_uso = False
                 for i in self.posicoes_navios_player:
@@ -330,7 +349,17 @@ class ControladorPartida:
                 condicaoy = True
                 try:
                     posicoes_x = self.tela_oceano.posiciona_navios_x()
+                    if posicoes_x is None:
+                        self.tela_oceano.mostra_mensagem("Cancelado pelo usuário")
+                        self.__posicoes_navios_player = []
+                        self.__posicoes_navios_computador = []
+                        self.__controlador_geral.controlador_jogador.abre_tela()
                     posicoes_y = self.tela_oceano.posiciona_navios_y()
+                    if posicoes_y is None:
+                        self.tela_oceano.mostra_mensagem("Cancelado pelo usuário")
+                        self.__posicoes_navios_player = []
+                        self.__posicoes_navios_computador = []
+                        self.__controlador_geral.controlador_jogador.abre_tela()
 
                     if len(posicoes_x) == tamanho and len(posicoes_y) == 1:
                         condicaoy = False
@@ -390,7 +419,17 @@ class ControladorPartida:
                 condicaoy = True
                 try:
                     posicoes_x = self.tela_oceano.posiciona_navios_x()
+                    if posicoes_x is None:
+                        self.tela_oceano.mostra_mensagem("Cancelado pelo usuário")
+                        self.__posicoes_navios_player = []
+                        self.__posicoes_navios_computador = []
+                        self.__controlador_geral.controlador_jogador.abre_tela()
                     posicoes_y = self.tela_oceano.posiciona_navios_y()
+                    if posicoes_y is None:
+                        self.tela_oceano.mostra_mensagem("Cancelado pelo usuário")
+                        self.__posicoes_navios_player = []
+                        self.__posicoes_navios_computador = []
+                        self.__controlador_geral.controlador_jogador.abre_tela()
 
                     if len(posicoes_x) == tamanho and len(posicoes_y) == 1:
                         condicaoy = False
@@ -452,7 +491,17 @@ class ControladorPartida:
                 condicaoy = True
                 try:
                     posicoes_x = self.tela_oceano.posiciona_navios_x()
+                    if posicoes_x is None:
+                        self.tela_oceano.mostra_mensagem("Cancelado pelo usuário")
+                        self.__posicoes_navios_player = []
+                        self.__posicoes_navios_computador = []
+                        self.__controlador_geral.controlador_jogador.abre_tela()
                     posicoes_y = self.tela_oceano.posiciona_navios_y()
+                    if posicoes_y is None:
+                        self.tela_oceano.mostra_mensagem("Cancelado pelo usuário")
+                        self.__posicoes_navios_player = []
+                        self.__posicoes_navios_computador = []
+                        self.__controlador_geral.controlador_jogador.abre_tela()
 
                     if len(posicoes_x) == tamanho and len(posicoes_y) == 1:
                         condicaoy = False

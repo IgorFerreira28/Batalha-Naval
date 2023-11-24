@@ -12,7 +12,7 @@ class TelaOceano:
             event, values = self.__window.read()
 
             if event == sg.WIN_CLOSED or event == 'Cancelar':
-                opcao = 0
+                opcao = None
                 break
             elif any(values.values()):
                 opcao = next((int(key) for key, value in values.items() if value), None)
@@ -82,7 +82,8 @@ class TelaOceano:
             event, values = window.Read()
 
             if event in (None, 'Cancel'):
-                break
+                window.close()
+                return None
 
             try:
                 cordenada_x = list(map(int, values['coordenadas'].split()))
@@ -97,8 +98,6 @@ class TelaOceano:
             except ValueError as ve:
                 sg.popup_error(f"ERRO: {ve}")
 
-        window.close()
-
     def posiciona_navios_y(self):
         layout = [
             [sg.Text('---Posicionando Navios---')],
@@ -112,7 +111,9 @@ class TelaOceano:
             event, values = window.Read()
 
             if event in (None, 'Cancel'):
-                break
+                window.close()
+                return None
+
 
             try:
                 cordenada_y = list(map(int, values['coordenadas'].split()))
@@ -126,8 +127,6 @@ class TelaOceano:
 
             except ValueError as ve:
                 sg.popup_error(f"ERRO: {ve}")
-
-        window.close()
 
     def jogada(self):
         layout = [
@@ -143,7 +142,8 @@ class TelaOceano:
             event, values = window.Read()
 
             if event in (None, 'Cancel'):
-                break
+                window.close()
+                return None
 
             try:
                 eixo_y = int(values['eixo_y'])
@@ -158,8 +158,6 @@ class TelaOceano:
 
             except ValueError as ve:
                 sg.popup_error(f"Erro: {ve}")
-
-        window.close()
 
     def mostra_mensagem(self, msg):
         sg.popup(msg)

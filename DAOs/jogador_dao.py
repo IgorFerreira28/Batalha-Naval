@@ -20,7 +20,7 @@ class JogadorDAO(DAO):
 
     def remove(self, key: int):
         if isinstance(key, int):
-            return super().remove(key)
+            super().remove(key)
     
     def get_all(self):
         return list(self._DAO__cache.values())

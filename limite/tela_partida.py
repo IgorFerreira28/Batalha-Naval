@@ -13,10 +13,14 @@ class TelaPartida:
             opcao = 1
         if values['0'] or button in (None, 'Cancelar'):
             opcao = 0
+        elif not values['1'] and not values['0']:
+            opcao = None
         self.close()
         return opcao
 
     def comecar_partida(self, lista_jogadores):
+        jogador_selecionado = False
+        modo_selecionado = False
         layout = [
             [sg.Text('-------- Início Partida --------')],
             [sg.Text('Escolha o jogador que jogará esta partida:')],
@@ -32,21 +36,22 @@ class TelaPartida:
             event, values = window.Read()
 
             if event in (None, 'Cancel'):
-                break
+                window.close()
+                return None
 
-            try:
-                selected_player_info = values['jogadores'][0].split('- ID: ')
-                jogador_id = int(selected_player_info[1])
+            if values['jogadores'] and not jogador_selecionado:
+                try:
+                    info_jogador_selecionado = values['jogadores'][0].split('- ID: ')
+                    jogador_id = int(info_jogador_selecionado[1])
+                    jogador_selecionado = True
+                except (ValueError, IndexError) as ve:
+                    sg.popup_error(f"Erro: {ve}")
+            if jogador_selecionado and (values['curto'] or values['longo']):
+                modo_selecionado = True
                 tamanho_oceano = 5 if values['curto'] else 10
-
-                sg.popup(f"Informações da Partida: Jogador={selected_player_info[0]}, ID={jogador_id}, Tamanho do Oceano={tamanho_oceano}")
+                sg.popup(f"Informações da Partida: Jogador={info_jogador_selecionado[0]}, ID={jogador_id}, Tamanho do Oceano={tamanho_oceano}")
                 window.close()
                 return {"id": jogador_id, "tamanho_oceano": tamanho_oceano}
-
-            except (ValueError, IndexError) as ve:
-                sg.popup_error(f"Erro: {ve}")
-
-        window.close()
 
     def mostra_mensagem(self, msg):
         sg.popup(msg)

@@ -13,6 +13,8 @@ class TelaGeral:
             opcao = 1
         if values['0'] or button in (None, 'Cancelar'):
             opcao = 0
+        elif not values['1'] and not values['0']:
+            opcao = None
         self.close()
         return opcao
 

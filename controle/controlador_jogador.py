@@ -33,6 +33,9 @@ class ControladorJogador:
 
     def inserir_jogador(self):
         dados_jogador = self.tela_jogador.dados_jogador()
+        if dados_jogador is None:
+            self.tela_jogador.mostra_mensagem("Cancelado pelo usuário")
+            return
         livre = True
         for i in self.__jogador_DAO.get_all():
             if i.id == dados_jogador["id"]:
@@ -48,6 +51,9 @@ class ControladorJogador:
         livre = True
         if (player is not None):
             novo_player = self.tela_jogador.dados_jogador()
+            if novo_player is None:
+                self.tela_jogador.mostra_mensagem("Cancelado pelo usuário")
+                return
             for i in self.__jogador_DAO.get_all():
                 if i.id == novo_player["id"]:
                     self.tela_jogador.mostra_mensagem("ID ja em uso!")
@@ -97,9 +103,8 @@ class ControladorJogador:
 
     def deletar_jogador(self):
         id_jogador = self.tela_jogador.seleciona_jogador(self.__jogador_DAO.get_all()) 
-        jogador = self.pega_jogador_por_id(id_jogador)
-        if jogador is not None:
-            self.__jogador_DAO.remove(jogador)
+        if id_jogador is not None:
+            self.__jogador_DAO.remove(id_jogador)
 
     def get_rank(self):
         players = self.__jogador_DAO.get_all()
